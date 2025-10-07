@@ -1,0 +1,112 @@
+# suggested gitignore for our stack -- AI generated, tweak as we go along
+
+
+# === Node & general build ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+.pnpm-store/
+dist/
+build/
+.cache/
+.tmp/
+.env
+.env.*
+!.env.example
+
+# === Logs ===
+logs/
+*.log
+*.log.*
+lerna-debug.log
+debug/
+debug.log
+
+# === OS / Editor junk ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+.idea/
+.vscode/
+*.swp
+*.swo
+*.tmp
+*.bak
+
+# === Coverage / Tests ===
+coverage/
+*.lcov
+.nyc_output/
+jest-html-reporters-*.html
+
+# === GitHub Actions / CI ===
+.github/workflows/tmp/
+!/.github/workflows/*.yml
+
+# === React web build ===
+web/node_modules/
+web/build/
+web/.env.local
+web/.env.development.local
+web/.env.test.local
+web/.env.production.local
+
+# === React Native / Expo mobile ===
+mobile/node_modules/
+mobile/.expo/
+mobile/.expo-shared/
+mobile/android/
+mobile/ios/
+mobile/web-build/
+mobile/dist/
+mobile/*.keystore
+mobile/keystore.properties
+mobile/*.jks
+
+# === Server ===
+server/node_modules/
+server/dist/
+server/.env.local
+server/.env.test
+server/.env.production
+server/uploads/
+server/logs/
+server/tmp/
+server/coverage/
+
+# === MongoDB / Data dumps ===
+dump/
+*.bson
+*.json
+*.gz
+
+# === System files ===
+*.lock
+*.pid
+*.seed
+*.pid.lock
+
+# === IDE project files ===
+*.iml
+*.sublime-project
+*.sublime-workspace
+
+# === Misc ===
+/docs/__pycache__/
+*.orig
+*.rej
+
+# === Ignore expo build artifacts ===
+mobile/.expo/
+mobile/web-build/
+mobile/.expo-shared/
+
+# === Ignore TypeScript build artifacts ===
+*.tsbuildinfo
+
+# === Ignore ESLint cache ===
+.eslintcache
