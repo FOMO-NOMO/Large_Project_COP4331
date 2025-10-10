@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 const fs = require('fs');
 
 async function connectToMongoDB() {
-    const uri = "mongodb+srv://dbuser:dbUserPass@cop4331largeprojectclus.uhn1kz7.mongodb.net/?retryWrites=true&w=majority&appName=COP4331LargeProjectCluster"; // Replace with your connection string and database name
+    const uri = ""; // Replace with your connection string and database name
     const client = new MongoClient(uri);
 
     try {
