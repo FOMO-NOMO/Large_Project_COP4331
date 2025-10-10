@@ -1,8 +1,21 @@
 const { MongoClient } = require('mongodb');
 const fs = require('fs');
 
+async function getMongoUri() {
+        try {
+            const response = await fetch('secret_creds.json'); // Replace with your file path
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const jsonData = await response.json(); // Parse the JSON data
+            return jsonData['mongoUri']; // Access the mongoUri property    
+        } catch (error) {
+            console.error("Error fetching or parsing JSON:", error);
+        }
+    }
+
 async function connectToMongoDB() {
-    const uri = "mongodb+srv://dbuser:dbUserPass@cop4331largeprojectclus.uhn1kz7.mongodb.net/?retryWrites=true&w=majority&appName=COP4331LargeProjectCluster"; // Replace with your connection string and database name
+    const uri = await getMongoUri(); // Replace with your connection string and database name
     const client = new MongoClient(uri);
 
     try {
