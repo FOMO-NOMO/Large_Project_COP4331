@@ -111,4 +111,4 @@ mobile/.expo-shared/
 # === Ignore ESLint cache ===
 .eslintcache
 
-.secret_creds.json
+.env
