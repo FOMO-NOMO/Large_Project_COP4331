@@ -20,7 +20,7 @@ function CardUI()
     const [cardList,setCardList] = useState('');
     const [search,setSearchValue] = React.useState('');
     const [card,setCardNameValue] = React.useState('');
-    
+
     async function addCard(e:any) : Promise<void>
     {
         e.preventDefault();
@@ -54,7 +54,7 @@ function CardUI()
     async function searchCard(e:any) : Promise<void>
     {
         e.preventDefault();
-        
+
         let obj = {userId:userId,search:search};
         let js = JSON.stringify(obj);
 
@@ -90,15 +90,15 @@ function CardUI()
     return(
     <div id="cardUIDiv">
         <br />
-        Search: <input type="text" id="searchText" placeholder="Card To Search For" 
+        Search: <input type="text" id="searchText" placeholder="Card To Search For"
             onChange={handleSearchTextChange} />
-        <button type="button" id="searchCardButton" className="buttons" 
+        <button type="button" id="searchCardButton" className="buttons"
             onClick={searchCard}> Search Card</button><br />
         <span id="cardSearchResult">{searchResults}</span>
         <p id="cardList">{cardList}</p><br /><br />
-        Add: <input type="text" id="cardText" placeholder="Card To Add" 
+        Add: <input type="text" id="cardText" placeholder="Card To Add"
             onChange={handleCardTextChange} />
-        <button type="button" id="addCardButton" className="buttons" 
+        <button type="button" id="addCardButton" className="buttons"
             onClick={addCard}> Add Card </button><br />
         <span id="cardAddResult">{message}</span>
     </div>

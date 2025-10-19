@@ -12,14 +12,14 @@ function Login()
 
         var obj = {login:loginName,password:loginPassword};
         var js = JSON.stringify(obj);
-  
+
         try
-        {    
+        {
             const response = await fetch('http://localhost:5000/api/login',
                 {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
-  
+
             var res = JSON.parse(await response.text());
-  
+
             if( res.id <= 0 )
             {
                 setMessage('User/Password combination incorrect');
@@ -28,7 +28,7 @@ function Login()
             {
                 var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
                 localStorage.setItem('user_data', JSON.stringify(user));
-  
+
                 setMessage('');
                 window.location.href = '/cards';
             }
@@ -37,7 +37,7 @@ function Login()
         {
             alert(error.toString());
             return;
-        }    
+        }
       };
 
 
@@ -54,12 +54,27 @@ function Login()
 
   return(
     <div id="loginDiv">
-      <span id="inner-title">PLEASE LOG IN</span><br />
-        Login: <input type="text" id="loginName" placeholder="Username" onChange={handleSetLoginName} />
-        
-        Password: <input type="password" id="loginPassword" placeholder="Password" onChange={handleSetPassword} />
-        <input type="submit" id="loginButton" className="buttons" value = "Do It" onClick={doLogin} />
-      <span id="loginResult">{message}</span>
+      <form id='loginForm'>
+        <div id='login-error-container'>
+          <span id="loginResult">{message}</span>
+        </div>
+        <div id='login-input-group'>
+          <div>
+            <label id='username-label'>Username</label>
+          </div>
+          <input type="text" id="login-input" placeholder="Username" onChange={handleSetLoginName} />
+        </div>
+        <div id='login-input-group'>
+          <div>
+            <label id='password-label'>Password</label>
+
+          </div>
+          <input type="password" id="password-input" placeholder="Password" onChange={handleSetPassword} />
+        </div>
+        <div id='login-submit-container'>
+          <button type='submit' id='login-button' className='buttons' onClick={doLogin}>Login</button>
+        </div>
+      </form>
     </div>
   );
 };

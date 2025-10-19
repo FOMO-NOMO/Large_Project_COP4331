@@ -1,13 +1,15 @@
-import PageTitle from '../components/PageTitle.tsx';
-import Login from '../components/Login.tsx';
+import PageTitle from '../components/PageTitle';
+import Login from '../components/Login';
 
 const LoginPage = () =>
 {
 
     return(
-      <div>
-        <PageTitle />
-        <Login />
+      <div id='login-page'>
+        <div id='login-container'>
+          <PageTitle />
+          <Login />
+        </div>
       </div>
     );
 };
