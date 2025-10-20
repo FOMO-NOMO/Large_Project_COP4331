@@ -3,6 +3,7 @@ import './App.css';
 
 import LoginPage from './pages/LoginPage';
 import CardPage from './pages/CardPage';
+import SignUp from "./components/SignUp";
 
 function App() {
 
@@ -10,7 +11,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/cards" element={<CardPage />} />
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/cards" element={<CardPage />}/>
       </Routes>
     </BrowserRouter>
       );

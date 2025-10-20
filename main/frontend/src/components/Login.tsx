@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login()
 {
+
+  const navigate = useNavigate();
   const [message,setMessage] = useState('');
   const [loginName,setLoginName] = React.useState('');
   const [loginPassword,setPassword] = React.useState('');
@@ -52,6 +55,11 @@ function Login()
   };
 
 
+  function goSignUp(){
+    window.location.href="/signup";
+  }
+
+
   return(
     <div id="loginDiv">
       <form id='loginForm'>
@@ -73,6 +81,9 @@ function Login()
         </div>
         <div id='login-submit-container'>
           <button type='submit' id='login-button' className='buttons' onClick={doLogin}>Login</button>
+        </div>
+        <div id='sign-up-submit-container'>
+          <p id='sign-up-button' className='buttons' onClick={goSignUp}>Don't have an account?</p>
         </div>
       </form>
     </div>

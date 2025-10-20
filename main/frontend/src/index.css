@@ -33,13 +33,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+li{
+  text-decoration: none;
+  list-style: none;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--text);
   text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  cursor: pointer;
 }
 
 body {
@@ -48,10 +51,22 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow: auto;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-light);
   width: 100%;
+  overflow: hidden;
 }
 
+/*#############
+
+CONTAINER FOR PAGES
+
+#############*/
+
+#container{
+  display: flex;
+  justify-content: flex-start;
+  height: 100vh;
+}
 
 /*#############
 
@@ -75,7 +90,7 @@ LOGIN
 }
 
 #login-container{
-  background-color: var(--bg-light);
+  background-color: var(--bg);
   border-radius: 20px;
   height: 50vh;
   width: 448px;
@@ -131,13 +146,13 @@ LOGIN
 }
 
 #login-button{
-  background-color: var(--bg-dark);
+  cursor: pointer;
   color:var(--text);
   padding: 0;
   width: 100%;
   font-size: 12px;
   border-radius: 6px;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-light);
   border: 1px solid var(--border);
   padding: 10px;
   margin-top: 10px;
@@ -149,36 +164,113 @@ LOGIN
 
 
 /*#############
-
 NAVBAR
-
 #############*/
 
-#loggedInDiv{
-  display: flex;
-  gap:10px
-}
-
-#header{
-  padding: 10px;
+#header {
+  top: 0;
+  background-color: var(--bg-dark);
   color: var(--text);
   display: flex;
-  flex-direction: column;
-}
-
-#header-title{
-  display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  padding: 20px;
+  width: 200px;
+}
+
+/* Left side: title + user */
+#header-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  padding-bottom: 20px;
+  flex-shrink: 0;
+}
+
+/* Middle: navigation links */
+#navbar {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}
+
+#navbar ul {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#navbar li {
+  display: flex;
+  width: 100%;
   align-items: center;
 }
 
-ul{
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+#navbar a {
+  width: 100%;
+  text-align: left;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
 }
+
+#navbar a:hover {
+  background-color: var(--bg-light);
+  color: var(--text);
+}
+
+/* Right side: logout section */
+#logout-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+#logout-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: none;
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  color: var(--danger);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+#logout-button:hover {
+  background-color: var(--danger);
+  color: var(--bg-light);
+}
+
+#logout-button img {
+  height: 18px;
+}
+
+#sign-up-submit-container{
+  color:var(--text);
+  font-size: 12px;
+  cursor: pointer;
+}
+
 
 /*#############
 
@@ -188,6 +280,10 @@ CARD
 
 
 #cardUIDiv{
+  width: 90%;
+  height: 100%;
+  overflow-y: auto;
+  margin: auto;
   color: var(--text);
 }
 

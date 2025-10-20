@@ -1,13 +1,13 @@
 import PageTitle from '../components/PageTitle';
 import LoggedInName from '../components/LoggedInName';
 import CardUI from '../components/CardUI';
-import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 
 const CardPage = () =>
 {
     return(
-        <div>
-            <Header/>
+        <div id='container'>
+            <Navbar/>
             <CardUI />
         </div>
     );
