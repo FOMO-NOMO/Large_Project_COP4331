@@ -80,7 +80,9 @@ server/coverage/
 # === MongoDB / Data dumps ===
 dump/
 *.bson
-*.json
+# Only ignore data dump JSON files, not config files
+dump*.json
+data*.json
 *.gz
 
 # === System files ===
