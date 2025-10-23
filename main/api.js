@@ -71,6 +71,36 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
+    app.post('api/register', async (req, res, next) => {
+        // incoming: firstName, lastName, email, login, password
+        // outgoing: error
+        var error = '';
+        const { firstName, lastName, email, login, password } = req.body;
+        const newUser = {
+            FirstName: firstName,
+            LastName: lastName,
+            Email: email,
+            Login: login,
+            Password: password
+        };
+        
+        try {
+            const db = client.db('COP4331Cards');
+            const lastUser = await db.collection('Users').find().sort({ UserId: -1 }).limit(1).toArray();
+            var newUserId = 1;
+            if (lastUser.length > 0) {
+                newUserId = lastUser[0].UserId + 1;
+            }
+            newUser.UserId = newUserId;
+            const result = await db.collection('Users').insertOne(newUser);
+        }
+        catch (e) {
+            error = e.toString();
+        }
+        var ret = { error: error };
+        res.status(200).json(ret);
+    });
+
     app.post('/api/searchcards', async (req, res, next) => {
         // incoming: userId, search
         // outgoing: results[], error
