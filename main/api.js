@@ -77,7 +77,7 @@ exports.setApp = function ( app, client )
     }
     else
     {
-        ret = {error:"Login/Password incorrect", result : results};
+        ret = {error:"Login/Password incorrect", array:results};
     }
         res.status(200).json(ret);
     });
