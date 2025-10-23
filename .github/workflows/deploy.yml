@@ -49,14 +49,14 @@ jobs:
     - name: Deploy backend files
       uses: appleboy/scp-action@v0.1.5
       with:
-        working-directory: ./main
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "server.js,package.json,package-lock.json,api.js"
+        source: "main/server.js,main/package.json,main/package-lock.json,main/api.js, main/createJWT.js"
         target: "/var/mainServer"
         overwrite: true
+        strip_components: 1
 
     # Install backend dependencies and restart PM2
     - name: Install dependencies and restart server
