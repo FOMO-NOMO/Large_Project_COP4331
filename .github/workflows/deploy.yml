@@ -71,6 +71,11 @@ jobs:
           cd /var/mainServer
           # Install dependencies
           npm install --production
+          npm install express
+          npm install cors
+          npm install mongodb
+          npm install jsonwebtoken
+          npm install dotenv
           # Ensure PM2 is installed globally
           npm list -g pm2 || npm install -g pm2
           # Reload the application with PM2 (zero-downtime reload)
