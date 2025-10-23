@@ -46,6 +46,8 @@ exports.setApp = function (app, client) {
         const results = await
             db.collection('Users').find({ Login: login, Password: password }).toArray
                 ();
+
+        console.log(results);
         var id = -1;
         var fn = '';
         var ln = '';
@@ -55,9 +57,8 @@ exports.setApp = function (app, client) {
             fn = results[0].FirstName;
             ln = results[0].LastName;
             try {
-                ret = { error: error, id: id, firstName: fn, lastName: ln };
-                //const token = require("./createJWT.js");
-                //ret = token.createToken( fn, ln, id );
+                const token = require("./createJWT.js");
+                ret = token.createToken( fn, ln, id );
             }
             catch (e) {
                 ret = { error: e.message, result: results };
