@@ -70,7 +70,7 @@ jobs:
           # Navigate to backend directory
           cd /var/mainServer
           # Install dependencies
-          npm ci --production
+          npm install --production
           # Ensure PM2 is installed globally
           npm list -g pm2 || npm install -g pm2
           # Reload the application with PM2 (zero-downtime reload)
