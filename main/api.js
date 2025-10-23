@@ -47,7 +47,8 @@ exports.setApp = function (app, client) {
             db.collection('Users').find({ Login: login, Password: password }).toArray
                 ();
 
-        console.log(results);
+        console.log(results[0]);
+        console.log(results.length);
         var id = -1;
         var fn = '';
         var ln = '';
