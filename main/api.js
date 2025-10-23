@@ -72,12 +72,12 @@ exports.setApp = function ( app, client )
         }
         catch(e)
         {
-            ret = {error:e.message, result : results};
+            ret = {error:e.message};
         }
     }
     else
     {
-        ret = {error:"Login/Password incorrect"};
+        ret = {error:"Login/Password incorrect", array:results};
     }
         res.status(200).json(ret);
     });
