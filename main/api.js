@@ -56,7 +56,6 @@ exports.setApp = function ( app, client )
     const results = await
     db.collection('Users').find({Login:login,Password:password}).toArray
     ();
-    console.log(results);
     var id = -1;
     var fn = '';
     var ln = '';
@@ -78,7 +77,7 @@ exports.setApp = function ( app, client )
     }
     else
     {
-        ret = {error:"Login/Password incorrect"};
+        ret = {error:"Login/Password incorrect", result : results};
     }
         res.status(200).json(ret);
     });
