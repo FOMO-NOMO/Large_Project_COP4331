@@ -23,7 +23,7 @@ _createToken = function ( fn, ln, id )
     }
     catch(e)
     {
-    var ret = {error:e.message};
+    var ret = {error:e.message, user_info:user};
     }
     return ret;
 }

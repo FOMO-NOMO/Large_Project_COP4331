@@ -72,7 +72,7 @@ exports.setApp = function ( app, client )
         }
         catch(e)
         {
-            ret = {error:e.message};
+            ret = {error:e.message, result: results};
         }
     }
     else
