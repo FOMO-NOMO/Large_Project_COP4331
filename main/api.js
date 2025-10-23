@@ -43,10 +43,7 @@ exports.setApp = function (app, client) {
         var error = '';
         const { login, password } = req.body;
         const db = client.db('COP4331Cards');
-        const results = await
-            db.collection('Users').find({ Login: login, Password: password }).toArray
-                ();
-
+        const results = await db.collection('Users').find({ Login: login, Password: password }).toArray();
         console.log(results[0]);
         var id = -1;
         var fn = '';
