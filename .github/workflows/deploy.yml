@@ -53,7 +53,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "server.js,package.json,package-lock.json,api.js"
+        source: "main/server.js,main/package.json,main/package-lock.json,main/api.js, main/createJWT.js"
         target: "/var/mainServer"
         overwrite: true
         strip_components: 1
