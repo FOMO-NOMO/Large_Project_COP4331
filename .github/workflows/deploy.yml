@@ -49,11 +49,12 @@ jobs:
     - name: Deploy backend files
       uses: appleboy/scp-action@v0.1.5
       with:
+        working-directory: ./main
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "main/server.js,main/package.json,main/package-lock.json"
+        source: "server.js,package.json,package-lock.json,api.js"
         target: "/var/mainServer"
         overwrite: true
 
@@ -69,7 +70,7 @@ jobs:
           # Navigate to backend directory
           cd /var/mainServer
           # Install dependencies
-          npm ci --production
+          npm install --production
           # Ensure PM2 is installed globally
           npm list -g pm2 || npm install -g pm2
           # Reload the application with PM2 (zero-downtime reload)
