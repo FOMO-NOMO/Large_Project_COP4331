@@ -71,7 +71,7 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
-    app.post('api/register', async (req, res, next) => {
+    app.post('/api/register', async (req, res, next) => {
         // incoming: firstName, lastName, email, login, password
         // outgoing: error
         var error = '';
@@ -83,7 +83,7 @@ exports.setApp = function (app, client) {
             Login: login,
             Password: password
         };
-        
+
         try {
             const db = client.db('COP4331Cards');
             const lastUser = await db.collection('Users').find().sort({ UserId: -1 }).limit(1).toArray();
