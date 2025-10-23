@@ -77,4 +77,4 @@ jobs:
           # Save PM2 process list
           pm2 save
           # Optional: Clear nginx cache if needed
-          nginx -s reload
+          sudo nginx -s reload
