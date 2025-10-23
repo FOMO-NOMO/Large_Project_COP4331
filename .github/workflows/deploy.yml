@@ -24,11 +24,11 @@ jobs:
 
     # Install and build frontend
     - name: Install frontend dependencies
-      working-directory: ./frontend
+      working-directory: main/frontend
       run: npm ci
 
     - name: Build frontend
-      working-directory: ./frontend
+      working-directory: main/frontend
       run: npm run build
     
     # Deploy frontend to server
