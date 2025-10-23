@@ -43,7 +43,7 @@ jobs:
         source: "main/frontend/dist/*"
         target: "/var/www/html"
         strip_components: 2
-        rm: true
+        overwrite: true
 
     # Deploy backend files to server
     - name: Deploy backend files
