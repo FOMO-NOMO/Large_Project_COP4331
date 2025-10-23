@@ -53,6 +53,7 @@ exports.setApp = function (app, client) {
         var ln = '';
         var ret;
         if (results.length > 0) {
+            console.log("went to IF");
             id = results[0].UserId;
             fn = results[0].FirstName;
             ln = results[0].LastName;
@@ -66,8 +67,10 @@ exports.setApp = function (app, client) {
             }
         }
         else {
+            console.log("went to ELSE");
             ret = { error: "Login/Password incorrect", array: results };
         }
+        console.log("Returning from login: ");
         res.status(200).json(ret);
     });
 
