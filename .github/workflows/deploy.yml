@@ -54,7 +54,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "server.js,package.json,package-lock.json"
+        source: "server.js,package.json,package-lock.json,api.js"
         target: "/var/mainServer"
         overwrite: true
 
