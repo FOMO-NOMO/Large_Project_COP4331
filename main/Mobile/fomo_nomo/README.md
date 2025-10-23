@@ -70,7 +70,7 @@ Flutter + Dart extension
 ## Option B – Through Terminal
 ### 1.) flutter create project_name
 ### 2.) cd project_name
-### 3.) run flutter
+### 3.) flutter run
 Optional: type Code . (an extension that opens project to specified IDE)
 
 ## 🌐 Step 6 – Run on a Simulator or Emulator (be on the main.dart file)
