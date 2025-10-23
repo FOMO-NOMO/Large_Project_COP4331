@@ -67,8 +67,9 @@ exports.setApp = function ( app, client )
         ln = results[0].LastName;
         try
         {
-            const token = require("./createJWT.js");
-            ret = token.createToken( fn, ln, id );
+            ret = {error:error, id:id, firstName:fn, lastName:ln};
+            //const token = require("./createJWT.js");
+            //ret = token.createToken( fn, ln, id );
         }
         catch(e)
         {
