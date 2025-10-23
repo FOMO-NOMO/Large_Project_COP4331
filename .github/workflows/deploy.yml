@@ -40,9 +40,9 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "main/frontend/dist/assets,main/frontend/dist/index.html,main/frontend/dist/vite.svg"
+        source: "main/frontend/dist/*"
         target: "/var/www/html"
-        strip_components: 2
+        strip_components: 3
         rm: true
 
     # Deploy backend files to server
