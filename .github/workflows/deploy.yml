@@ -19,8 +19,8 @@ jobs:
         node-version: '22.18'
         cache: 'npm'
         cache-dependency-path: |
-          package-lock.json
-          frontend/package-lock.json
+          main/package-lock.json
+          main/frontend/package-lock.json
 
     # Install and build frontend
     - name: Install frontend dependencies
@@ -39,7 +39,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PEMKEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "frontend/dist/*"
+        source: "main/frontend/dist/*"
         target: "/var/www/html"
         strip_components: 2
         rm: true
@@ -52,7 +52,7 @@ jobs:
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SERVER_PEMKEY }}
         port: ${{ secrets.SERVER_PORT }}
-        source: "server.js,package.json,package-lock.json"
+        source: "main/server.js,main/package.json,main/package-lock.json"
         target: "/var/mainServer"
         overwrite: true
 
