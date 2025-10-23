@@ -48,7 +48,6 @@ exports.setApp = function (app, client) {
                 ();
 
         console.log(results[0]);
-        console.log(results.length);
         var id = -1;
         var fn = '';
         var ln = '';
@@ -57,6 +56,7 @@ exports.setApp = function (app, client) {
             id = results[0].UserId;
             fn = results[0].FirstName;
             ln = results[0].LastName;
+            console.log("Creating token for " + fn + " " + ln + " with id " + id);
             try {
                 const token = require("./createJWT.js");
                 ret = token.createToken( fn, ln, id );
