@@ -86,7 +86,7 @@ exports.setApp = function (app, client) {
         var error = '';
         const { email, password } = req.body;
         const db = client.db('users_management');
-        const results = await db.collection('users').find({ email: login, password: password }).toArray();
+        const results = await db.collection('users').find({ email: email, password: password }).toArray();
         var id = -1;
         var fn = '';
         var ln = '';
@@ -116,12 +116,11 @@ exports.setApp = function (app, client) {
         // outgoing: error
         var error = '';
         
-        const { firstName, lastName, email, login, password, displayName, profilePhotoUrl, bio, major, classYear, interests,  } = req.body;
+        const { firstName, lastName, email, password, displayName, profilePhotoUrl, bio, major, classYear, interests,  } = req.body;
         const newUser = {
             firstName: firstName,
             lastName: lastName,
             email: email,
-            login: login,
             password: password,
             displayName: displayName,
             profilePhotoUrl: profilePhotoUrl,
