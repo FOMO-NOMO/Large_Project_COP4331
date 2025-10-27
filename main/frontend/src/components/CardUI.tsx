@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { buildPath } from './Path';
+import { buildPath } from '../Path';
 import { retrieveToken, storeToken } from '../tokenStorage';
 
 function CardUI() {

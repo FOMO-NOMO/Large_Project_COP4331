@@ -1,0 +1,1 @@
+export declare function buildPath(route: string): string;
