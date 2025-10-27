@@ -1,7 +1,7 @@
 ﻿// Component: Group Card
 // Purpose: Individual group display component
 import React from "react";
-import { Group } from "../../types";
+import type { Group } from "../../types";
 
 interface GroupCardProps {
   group: Group;

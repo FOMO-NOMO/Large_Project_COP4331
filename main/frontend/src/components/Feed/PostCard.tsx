@@ -1,7 +1,7 @@
 ﻿// Component: Post Card
 // Purpose: Individual post display component, contained by FeedList
 import React from "react";
-import { Post } from "../../types";
+import type { Post } from "../../types";
 
 interface PostCardProps {
   post: Post;

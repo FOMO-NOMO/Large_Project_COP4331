@@ -1,7 +1,7 @@
 ﻿// Component: Feed List
 // Purpose: List container for feed posts
 import React from "react";
-import { Post } from "../../types";
+import type { Post } from "../../types";
 
 interface FeedListProps {
   posts: Post[];
