@@ -92,11 +92,9 @@ exports.setApp = function (app, client) {
         var ln = '';
         var ret;
         if (results.length > 0) {
-            console.log("went to IF");
             id = results[0].userId;
             fn = results[0].firstName;
             ln = results[0].lastName;
-            console.log("Creating token for " + fn + " " + ln + " with id " + id);
             try {
                 const token = require("./createJWT.js");
                 ret = token.createToken( fn, ln, id );
@@ -116,18 +114,18 @@ exports.setApp = function (app, client) {
         // outgoing: error
         var error = '';
         
-        const { firstName, lastName, email, password, displayName, profilePhotoUrl, bio, major, classYear, interests,  } = req.body;
+        const { firstName, lastName, email, password, displayName, bio} = req.body;
         const newUser = {
             firstName: firstName,
             lastName: lastName,
             email: email,
             password: password,
             displayName: displayName,
-            profilePhotoUrl: profilePhotoUrl,
+            profilePhotoUrl: null,
             bio: bio,
-            major: major,
-            classYear: classYear,
-            interests: interests,
+            major: null,
+            classYear: null,
+            interests: null,
             createdAt: new Date()
         };
 
@@ -148,6 +146,31 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
-    
+    //Survey Submission API Endpoints
+    app.post('/api/survey/submit', async (req, res, next) => {
+        //incoming: userId, interests[string, string...], major, classYear, bio
+        //outgoing: message("Survey Saved"), error
 
+        var error = '';
+        const { userId, interests, major, classYear } = req.body;
+
+        try {
+            const db = client.db('user_management');
+            const result = await db.collection('users').updateOne(
+                { userId: userId },
+                {
+                    $set: {
+                        interests: interests,
+                        major: major,
+                        classYear: classYear
+                    }
+                }
+            );
+        }
+        catch (e) {
+            error = e.toString();
+        }
+        var ret = { message: "Survey Saved", error: error };
+        res.status(200).json(ret);
+    });
 }
