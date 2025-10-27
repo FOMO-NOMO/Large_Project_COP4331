@@ -87,7 +87,8 @@ exports.setApp = function (app, client) {
         // outgoing: id, token, firstName, lastName, error
         var error = '';
         const { email, password } = req.body;
-        const db = client.db('users_management');
+        console.log(email, password);
+        const db = client.db('user_management');
         const results = await db.collection('users').find({ email: email, password: password }).toArray();
         var id = -1;
         var fn = '';
@@ -127,7 +128,7 @@ exports.setApp = function (app, client) {
             bio: bio,
             major: null,
             classYear: null,
-            interests: null,
+            interests: [],
             createdAt: new Date()
         };
 
@@ -202,7 +203,7 @@ exports.setApp = function (app, client) {
         };
 
         try {
-            const db = client.db('posts_management');
+            const db = client.db('user_management');
             const lastPost = await db.collection('posts').find().sort({ postId: -1 }).limit(1).toArray();
             var newPostId = 1;
             if (lastPost.length > 0) {
