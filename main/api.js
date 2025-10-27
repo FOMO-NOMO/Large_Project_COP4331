@@ -79,6 +79,8 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
+
+
     //Auth API Endpoints
     app.post('/api/auth/login', async (req, res, next) => {
         // incoming: email, password
@@ -146,6 +148,8 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
+
+
     //Survey Submission API Endpoints
     app.post('/api/survey/submit', async (req, res, next) => {
         //incoming: userId, interests[string, string...], major, classYear, bio
@@ -171,6 +175,46 @@ exports.setApp = function (app, client) {
             error = e.toString();
         }
         var ret = { message: "Survey Saved", error: error };
+        res.status(200).json(ret);
+    });
+
+
+
+    //Posts Endpoints
+    app.post('/api/posts/create', async (req, res, next) => {
+        // incoming: userId, title, description, tags, capacity
+        // outgoing: post, error
+
+        var error = '';
+        const { userId, title, description, tags, capacity } = req.body;
+        const newPost = {
+            userId: userId,
+            title: title,
+            description: description,
+            tags: tags,
+            capacity: capacity,
+            likeCount: 0,
+            commentCount: 0,
+            createdAt: new Date(),
+            comments: [],
+            postId: null,
+            userId: userId
+        };
+
+        try {
+            const db = client.db('posts_management');
+            const lastPost = await db.collection('posts').find().sort({ postId: -1 }).limit(1).toArray();
+            var newPostId = 1;
+            if (lastPost.length > 0) {
+                newPostId = lastPost[0].postId + 1;
+            }
+            newPost.postId = newPostId;
+            const result = await db.collection('posts').insertOne(newPost);
+        }
+        catch (e) {
+            error = e.toString();
+        }
+        var ret = { post: newPost, error: error };
         res.status(200).json(ret);
     });
 }
