@@ -90,7 +90,7 @@ exports.setApp = function (app, client) {
             }
         });
 
-        const verificationUrl = `${baseUrl}/api/auth/verify-email?verificationToken=${verificationToken}`;
+        const verificationUrl = `${baseUrl}/api/auth/verify?verificationToken=${verificationToken}`;
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
