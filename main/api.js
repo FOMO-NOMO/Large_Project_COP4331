@@ -208,6 +208,8 @@ exports.setApp = function (app, client) {
         try {
         const { verificationToken } = req.query;
 
+        console.log('Received verification token:', verificationToken);
+
         if (!verificationToken) {
             return res.status(400).json({ msg: 'No token provided' });
         }
