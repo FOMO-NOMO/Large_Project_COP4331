@@ -88,7 +88,7 @@ exports.setApp = function (app, client) {
         }
     });
 
-    const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${baseUrl}/api/auth/verify-email?verificationToken=${verificationToken}`;
 
     const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -147,7 +147,7 @@ exports.setApp = function (app, client) {
         // incoming: firstName, lastName, email, login, password
         // outgoing: error
         var error = '';
-        
+        const token = require('jsonwebtoken');
         const { firstName, lastName, email, password, displayName, bio} = req.body;
         const newUser = {
             firstName: firstName,
@@ -182,7 +182,7 @@ exports.setApp = function (app, client) {
                 const result = await db.collection('users').insertOne(newUser);
 
                 const insertedId = result.insertedId;
-                const verificationToken = jwt.sign(
+                const verificationToken = token.sign(
                     { userId: insertedId }, // Use the MongoDB _id
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '15m' }
@@ -202,15 +202,16 @@ exports.setApp = function (app, client) {
     });
 
     app.get('/api/auth/verify', async (req, res) => {
+        const token = require('jsonwebtoken');
         try {
-        const { token } = req.query;
+        const { verificationToken } = req.query;
 
-        if (!token) {
+        if (!verificationToken) {
             return res.status(400).json({ msg: 'No token provided' });
         }
 
         // Verify the token
-        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decoded = token.verify(token, process.env.ACCESS_TOKEN_SECRET);
         
         // Get the user ID from the token (it's the MongoDB _id)
         const userId = new ObjectId(decoded.userId);
