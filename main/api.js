@@ -79,6 +79,37 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
+    const sendVerificationEmail = (email, verificationToken, baseUrl) => {
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+        }
+    });
+
+    const verificationUrl = `${baseUrl}/api/auth/verify-email?token=${verificationToken}`;
+
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Please verify your email address',
+        html: `
+        <p>Hello,</p>
+        <p>Thank you for registering. Please click the link below to verify your email address:</p>
+        <a href="${verificationUrl}">Verify Email</a>
+        <p>This link will expire in 15 minutes.</p>
+        `
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+        console.log('Error sending email:', error);
+        } else {
+        console.log('Verification email sent:', info.response);
+        }
+    });
+    };
 
 
     //Auth API Endpoints
@@ -129,25 +160,85 @@ exports.setApp = function (app, client) {
             major: null,
             classYear: null,
             interests: [],
-            createdAt: new Date()
+            createdAt: new Date(),
+            isVerified: false,
         };
 
         try {
             const db = client.db('user_management');
-            const lastUser = await db.collection('users').find().sort({ userId: -1 }).limit(1).toArray();
-            var newUserId = 1;
-            if (lastUser.length > 0) {
-                newUserId = lastUser[0].userId + 1;
+            const existingUser = await db.collection('users').findOne({ email: email });
+            if (existingUser) {
+                error = 'An account with this email already exists.';
+                return res.status(400).json({ error: error });
             }
-            newUser.userId = newUserId;
-            const result = await db.collection('users').insertOne(newUser);
+
+            else{
+                const lastUser = await db.collection('users').find().sort({ userId: -1 }).limit(1).toArray();
+                var newUserId = 1;
+                if (lastUser.length > 0) {
+                    newUserId = lastUser[0].userId + 1;
+                }
+                newUser.userId = newUserId;
+                const result = await db.collection('users').insertOne(newUser);
+
+                const insertedId = result.insertedId;
+                const verificationToken = jwt.sign(
+                    { userId: insertedId }, // Use the MongoDB _id
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '15m' }
+                );
+
+                const baseURL = `${req.protocol}://${req.get('host')}`;
+
+                sendVerificationEmail(email, verificationToken, baseURL);
+            }
         }
         catch (e) {
             error = e.toString();
+            res.status(500).json({ error: error });
         }
-        var ret = { error: error };
-        res.status(200).json(ret);
+        var ret = { message:  'Registration successful. Please check your email to verify your account.',error: error };
+        res.status(201).json(ret);
     });
+
+    app.get('/api/auth/verify', async (req, res) => {
+        try {
+        const { token } = req.query;
+
+        if (!token) {
+            return res.status(400).json({ msg: 'No token provided' });
+        }
+
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        
+        // Get the user ID from the token (it's the MongoDB _id)
+        const userId = new ObjectId(decoded.userId);
+        
+        const user = await db.collection("users").findOne({ _id: userId });
+
+        if (!user) {
+            return res.status(400).json({ msg: 'User not found.' });
+        }
+
+        if (user.isVerified) {
+            return res.status(200).send('Email is already verified. You can now log in.');
+        }
+
+        // Update the user to set isVerified: true
+        await db.collection("users").updateOne(
+            { _id: user._id },
+            { $set: { isVerified: true } }
+        );
+
+        res.status(200).send('<h1>Email Verified!</h1><p>Your email has been successfully verified. You can now close this tab and log in.</p>');
+
+        } catch (err) {
+        console.error(err.message);
+        res.status(400).json({ msg: 'Invalid or expired token.' });
+        }
+    });
+    
 
 
 
