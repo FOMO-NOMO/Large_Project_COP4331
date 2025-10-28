@@ -76,6 +76,7 @@ jobs:
           npm install mongodb
           npm install jsonwebtoken
           npm install dotenv
+          npm install nodemailer
           # Ensure PM2 is installed globally
           npm list -g pm2 || npm install -g pm2
           # Reload the application with PM2 (zero-downtime reload)
