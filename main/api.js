@@ -80,6 +80,10 @@ exports.setApp = function (app, client) {
         res.status(200).json(ret);
     });
 
+
+
+    //Helper Methods
+
     const sendVerificationEmail = (email, verificationToken, baseUrl) => {
         const nodemailer = require('nodemailer');
         const transporter = nodemailer.createTransport({
@@ -111,6 +115,40 @@ exports.setApp = function (app, client) {
             console.log('Verification email sent:', info.response);
             }
         });
+
+        return verificationUrl;
+    };
+
+    const sendResetEmail = (email, Url) => {
+        const nodemailer = require('nodemailer');
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Forgot Password Request',
+            html: `
+            <p>Hello,</p>
+            <p>Forgot your Password? Please click the link below to reset your password:</p>
+            <a href="${Url}">Reset Password</a>
+            <p>This link will expire in 15 minutes.</p>
+            `
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+            console.log('Error sending email:', error);
+            } else {
+            console.log('Forgot Password email sent:', info.response);
+            }
+        });
+
     };
 
 
@@ -149,7 +187,9 @@ exports.setApp = function (app, client) {
         // incoming: firstName, lastName, email, login, password
         // outgoing: error
         var error = '';
-        const token = require('jsonwebtoken');
+
+        var ret = { error: error };
+        const jwt = require('jsonwebtoken');
         const { firstName, lastName, email, password, displayName, bio} = req.body;
         const newUser = {
             firstName: firstName,
@@ -183,7 +223,7 @@ exports.setApp = function (app, client) {
                 newUser.userId = newUserId;
                 const result = await db.collection('users').insertOne(newUser);
 
-                const verificationToken = token.sign(
+                const verificationToken = jwt.sign(
                     { userId: newUserId }, // Use the MongoDB _id
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '15m' }
@@ -191,19 +231,20 @@ exports.setApp = function (app, client) {
 
                 const baseURL = `${req.protocol}://${req.get('host')}`;
 
-                sendVerificationEmail(email, verificationToken, baseURL);
+                verificationLink = sendVerificationEmail(email, verificationToken, baseURL);
+
+                var ret = { message: 'Registration successful. Please check your email to verify your account.', userId: newUserId, emailVerificationSent: true, verificationLink: verificationLink, error: error };
             }
         }
         catch (e) {
             error = e.toString();
             res.status(500).json({ error: error });
         }
-        var ret = { message:  'Registration successful. Please check your email to verify your account.',error: error };
         res.status(201).json(ret);
     });
 
     app.get('/api/auth/verify', async (req, res) => {
-        const token = require('jsonwebtoken');
+        const jwt = require('jsonwebtoken');
         try {
         const { verificationToken } = req.query;
 
@@ -212,7 +253,7 @@ exports.setApp = function (app, client) {
         }
 
         // Verify the token
-        const decoded = token.verify(verificationToken, process.env.ACCESS_TOKEN_SECRET);
+        const decoded = jwt.verify(verificationToken, process.env.ACCESS_TOKEN_SECRET);
         
         // Get the user ID from the token (it's the MongoDB _id)
         const userId = decoded.userId;
@@ -242,7 +283,72 @@ exports.setApp = function (app, client) {
         res.status(400).json({ msg: 'Invalid or expired token.' });
         }
     });
+
+    app.post('/api/auth/forgot-password', async (req, res, next) => {
+        // incoming: email
+        // outgoing: message(Password reset email sent), error
     
+        var error = '';
+        var ret = {error: error};
+        const { email } = req.body;
+
+        try {
+            const db = client.db('user_management');
+            const user = await db.collection('users').findOne({ email: email });
+            if (!user) {
+                error = 'No account with that email address exists.';
+            } else {
+                const jwt = require('jsonwebtoken');
+                const resetToken = jwt.sign(
+                    { userId: user.userId },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '15m' }
+                );
+
+                const baseURL = `${req.protocol}://${req.get('host')}/reset-password?resetToken=${resetToken}`;
+                sendResetEmail(email, resetToken, baseURL);
+
+                var ret = { message: "Password reset email sent", resetToken: resetToken, error: error};
+            }
+        }
+        catch (e) {
+            error = e.toString();
+            ret = {error:error};
+            res.status(500).json(ret);
+        }
+        
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/auth/reset-password', async (req, res, next) => {
+        // incoming: resetToken, newPassword
+        // outgoing: message(Password has been reset), error
+    
+        var error = '';
+        var ret = {error: error};
+        const { resetToken, newPassword } = req.body;
+
+        try {
+            const jwt = require('jsonwebtoken');
+            const decoded = jwt.verify(resetToken, process.env.ACCESS_TOKEN_SECRET);
+            const userId = decoded.userId;
+
+            const db = client.db('user_management');
+            const result = await db.collection('users').updateOne(
+                { userId: userId },
+                { $set: { password: newPassword } }
+            );
+
+            var ret = { message: "Password has been reset", error: error};
+        }
+        catch (e) {
+            error = e.toString();
+            ret = {error:error};
+            res.status(500).json(ret);
+        }
+        res.status(200).json(ret);
+
+    });
 
 
 
