@@ -189,7 +189,6 @@ exports.setApp = function (app, client) {
         var error = '';
 
         var ret = { error: error };
-        const jwt = require('jsonwebtoken');
         const { firstName, lastName, email, password, displayName, bio} = req.body;
         const newUser = {
             firstName: firstName,
@@ -223,11 +222,8 @@ exports.setApp = function (app, client) {
                 newUser.userId = newUserId;
                 const result = await db.collection('users').insertOne(newUser);
 
-                const verificationToken = jwt.sign(
-                    { userId: newUserId }, // Use the MongoDB _id
-                    process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '15m' }
-                );
+                const token = require("./createJWT.js");
+                const verificationToken = token.createToken(newUser.firstName, newUser.lastName, newUser.userId);
 
                 const baseURL = `${req.protocol}://${req.get('host')}`;
 
@@ -298,14 +294,11 @@ exports.setApp = function (app, client) {
             if (!user) {
                 error = 'No account with that email address exists.';
             } else {
-                const jwt = require('jsonwebtoken');
-                const resetToken = jwt.sign(
-                    { userId: user.userId },
-                    process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '15m' }
-                );
+                const token = require('./createJWT.js');
+                const resetToken = token.createToken(user.firstName, user.lastName, user.userId);
 
                 const baseURL = `${req.protocol}://${req.get('host')}/reset-password?resetToken=${resetToken}`;
+                
                 sendResetEmail(email, resetToken, baseURL);
 
                 var ret = { message: "Password reset email sent", resetToken: resetToken, error: error};
