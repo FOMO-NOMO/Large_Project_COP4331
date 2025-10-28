@@ -208,14 +208,12 @@ exports.setApp = function (app, client) {
         try {
         const { verificationToken } = req.query;
 
-        console.log('Received verification token:', verificationToken);
-
         if (!verificationToken) {
             return res.status(400).json({ msg: 'No token provided' });
         }
 
         // Verify the token
-        const decoded = token.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const decoded = token.verify(verificationToken, process.env.ACCESS_TOKEN_SECRET);
         
         // Get the user ID from the token (it's the MongoDB _id)
         const userId = new ObjectId(decoded.userId);
