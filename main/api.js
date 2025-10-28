@@ -183,9 +183,8 @@ exports.setApp = function (app, client) {
                 newUser.userId = newUserId;
                 const result = await db.collection('users').insertOne(newUser);
 
-                const insertedId = result.insertedId;
                 const verificationToken = token.sign(
-                    { userId: insertedId }, // Use the MongoDB _id
+                    { userId: newUserId }, // Use the MongoDB _id
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '15m' }
                 );
@@ -217,8 +216,10 @@ exports.setApp = function (app, client) {
         
         // Get the user ID from the token (it's the MongoDB _id)
         const userId = decoded.userId;
+        console.log(userId);
         
-        const user = await db.collection("users").findOne({ _id: userId });
+        const db = client.db('user_management');
+        const user = await db.collection("users").findOne({ userId: userId });
 
         if (!user) {
             return res.status(400).json({ msg: 'User not found.' });
@@ -230,7 +231,7 @@ exports.setApp = function (app, client) {
 
         // Update the user to set isVerified: true
         await db.collection("users").updateOne(
-            { _id: user._id },
+            { userId: user.userId },
             { $set: { isVerified: true } }
         );
 
