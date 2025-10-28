@@ -216,7 +216,7 @@ exports.setApp = function (app, client) {
         const decoded = token.verify(verificationToken, process.env.ACCESS_TOKEN_SECRET);
         
         // Get the user ID from the token (it's the MongoDB _id)
-        const userId = new ObjectId(decoded.userId);
+        const userId = decoded.userId;
         
         const user = await db.collection("users").findOne({ _id: userId });
 
