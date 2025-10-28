@@ -1,5 +1,6 @@
 require('express');
 require('mongodb');
+
 exports.setApp = function (app, client) {
     // Old Card Endpoints for reference
     app.post('/api/addcard', async (req, res, next) => {
@@ -80,35 +81,36 @@ exports.setApp = function (app, client) {
     });
 
     const sendVerificationEmail = (email, verificationToken, baseUrl) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
-        }
-    });
+        const nodemailer = require('nodemailer');
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+            }
+        });
 
-    const verificationUrl = `${baseUrl}/api/auth/verify-email?verificationToken=${verificationToken}`;
+        const verificationUrl = `${baseUrl}/api/auth/verify-email?verificationToken=${verificationToken}`;
 
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Please verify your email address',
-        html: `
-        <p>Hello,</p>
-        <p>Thank you for registering. Please click the link below to verify your email address:</p>
-        <a href="${verificationUrl}">Verify Email</a>
-        <p>This link will expire in 15 minutes.</p>
-        `
-    };
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: 'Please verify your email address',
+            html: `
+            <p>Hello,</p>
+            <p>Thank you for registering. Please click the link below to verify your email address:</p>
+            <a href="${verificationUrl}">Verify Email</a>
+            <p>This link will expire in 15 minutes.</p>
+            `
+        };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-        console.log('Error sending email:', error);
-        } else {
-        console.log('Verification email sent:', info.response);
-        }
-    });
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+            console.log('Error sending email:', error);
+            } else {
+            console.log('Verification email sent:', info.response);
+            }
+        });
     };
 
 
