@@ -189,15 +189,14 @@ exports.setApp = function (app, client) {
         var error = '';
 
         var ret = { error: error };
-        const { firstName, lastName, email, password, displayName, bio} = req.body;
+        const { firstName, lastName, email, login, password } = req.body;
         const newUser = {
             firstName: firstName,
             lastName: lastName,
             email: email,
+            login: login,
             password: password,
-            displayName: displayName,
             profilePhotoUrl: null,
-            bio: bio,
             major: null,
             classYear: null,
             interests: [],
