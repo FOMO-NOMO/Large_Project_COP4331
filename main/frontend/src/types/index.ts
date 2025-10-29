@@ -23,6 +23,18 @@ export interface Group {
   ucfGroupUrl?: string;
 }
 
+// need to add to database? possible implementation of messages
+export interface Message {
+  id: string;
+  senderId: string;
+  sender?: User;
+  receiverId: string;
+  receiver?: User;
+  content: string;
+  createdAt: string;
+  read: boolean;
+}
+
 export interface Comment {
   id: string;
   authorId: string;

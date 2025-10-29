@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './store/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import Survey from './pages/Survey';
 import Feed from './pages/Feed';
 import Groups from './pages/Groups';
@@ -13,53 +15,120 @@ import Profile from './pages/Profile';
 import BottomNavigation from './components/BottomNavigation';
 import LoadingSpinner from './components/LoadingSpinner';
 
-
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export function ProtectedRoute(props: ProtectedRouteProps) {
-  // TODO: implement protected route logic
-  // Expected behavior:
-  // - Check authentication status
-  // - Show loading spinner while checking
-  // - Redirect to login if not authenticated
-  // - Render children if authenticated
-  return <></>;
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
 }
 
 interface PublicRouteProps {
   children: React.ReactNode;
 }
 
-export function PublicRoute(props: PublicRouteProps) {
-  // TODO: implement public route logic  
-  // Expected behavior:
-  // - Check authentication status
-  // - Show loading spinner while checking
-  // - Redirect to feed if already authenticated
-  // - Render children if not authenticated
-  return <></>;
+export function PublicRoute({ children }: PublicRouteProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+  
+  if (isAuthenticated) {
+    return <Navigate to="/feed" replace />;
+  }
+  
+  return <>{children}</>;
 }
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-export function AppLayout(props: AppLayoutProps) {
-  // TODO: implement app layout structure
-  // Expected JSX:
-  // - Main container div
-  // - Content area that adjusts based on authentication
-  // - Conditional bottom navigation for authenticated users
-  return <></>;
+export function AppLayout({ children }: AppLayoutProps) {
+  const { isAuthenticated } = useAuth();
+  
+  return (
+    <div className="app-container">
+      <main className="main-content">
+        {children}
+      </main>
+      {isAuthenticated && <BottomNavigation />}
+    </div>
+  );
 }
 
 export default function App() {
-  // TODO: implement main app structure
-  // - Routes configuration:
-  //   - Public routes: /login, /register
-  //   - Protected routes: /survey, /feed, /groups, /messages, /profile
-  //   - Redirects for root and catch-all routes
-  return <></>;
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <AppLayout>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/login" element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            } />
+            <Route path="/forgot-password" element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            } />
+            <Route path="/reset-password" element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
+            } />
+            
+            {/* Protected routes */}
+            <Route path="/survey" element={
+              <ProtectedRoute>
+                <Survey />
+              </ProtectedRoute>
+            } />
+            <Route path="/feed" element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            } />
+            <Route path="/groups" element={
+              <ProtectedRoute>
+                <Groups />
+              </ProtectedRoute>
+            } />
+            <Route path="/messages" element={
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+            
+            {/* Redirects */}
+            <Route path="/" element={<Navigate to="/feed" replace />} />
+            <Route path="*" element={<Navigate to="/feed" replace />} />
+          </Routes>
+        </AppLayout>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }

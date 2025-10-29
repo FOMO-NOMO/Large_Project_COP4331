@@ -170,6 +170,53 @@ export class AuthAPI {
     }
   }
 
+  static async forgotPassword(email: string): Promise<{ message?: string; error?: string }> {
+    try {
+      const response = await fetch(buildPath('api/auth/forgot-password'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return data; // { message: "...", error?: "..." }
+    } catch (error) {
+      console.error('Forgot password API error:', error);
+      throw new Error('Failed to send password reset email. Please try again.');
+    }
+  }
+  
+  static async resetPassword(token: string, newPassword: string): Promise<{ message?: string; error?: string }> {
+    try {
+      const response = await fetch(buildPath('api/auth/reset-password'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ resetToken: token, newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
+
+      return data; // { message: "...", error?: "..." }
+    } catch (error) {
+      console.error('Reset password API error:', error);
+      throw new Error('Password reset failed. Please try again.');
+    }
+  }
+
+
   static isTokenExpired(): boolean {
     const token = localStorage.getItem('authToken');
     if (!token) return true;
