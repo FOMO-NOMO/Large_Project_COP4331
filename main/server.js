@@ -1,24 +1,22 @@
-
 const express = require('express');
 const cors = require('cors');
 
-
-// cors config to allow requests from frontend
+// CORS config to allow requests from frontend
 const allowedOrigins = [
-    'http://localhost:5173',
-    'https://fomonomo.xyz',
-    'http://fomonomo.xyz' // we only have http for now
-  ];
-
-app.use(cors({
-    origin: allowedOrigins,
-    credentials: true, // if you use cookies/JWT
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-  }));
+  'http://localhost:5173',
+  'https://fomonomo.xyz',
+  'http://fomonomo.xyz' // we only have http for now
+];
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, // if you use cookies/JWT
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
@@ -27,7 +25,7 @@ const client = new MongoClient(url);
 client.connect();
 
 var api = require('./api.js');
-api.setApp( app, client );
+api.setApp(app, client);
 
 const PORT = process.env.PORT || 5000;
 
