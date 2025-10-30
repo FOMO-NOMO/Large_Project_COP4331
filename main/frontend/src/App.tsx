@@ -8,11 +8,11 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Survey from './pages/Survey';
+import SurveyTest from './pages/SurveyTest';
 import Feed from './pages/Feed';
 import Groups from './pages/Groups';
 import Messages from './pages/Messages';
 import Profile from './pages/Profile';
-import BottomNavigation from './components/BottomNavigation';
 import LoadingSpinner from './components/LoadingSpinner';
 
 interface ProtectedRouteProps {
@@ -38,14 +38,15 @@ interface PublicRouteProps {
 }
 
 export function PublicRoute({ children }: PublicRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, isNewUser } = useAuth();
   
   if (isLoading) {
     return <LoadingSpinner />;
   }
   
   if (isAuthenticated) {
-    return <Navigate to="/feed" replace />;
+    // Redirect new users to survey, existing users to feed
+    return <Navigate to={isNewUser ? "/survey" : "/feed"} replace />;
   }
   
   return <>{children}</>;
@@ -56,14 +57,11 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { isAuthenticated } = useAuth();
-  
   return (
     <div className="app-container">
       <main className="main-content">
         {children}
       </main>
-      {isAuthenticated && <BottomNavigation />}
     </div>
   );
 }
@@ -102,6 +100,7 @@ export default function App() {
                 <Survey />
               </ProtectedRoute>
             } />
+            
             <Route path="/feed" element={
               <ProtectedRoute>
                 <Feed />

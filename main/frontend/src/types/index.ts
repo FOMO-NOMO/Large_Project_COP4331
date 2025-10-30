@@ -86,3 +86,21 @@ export interface UpdateProfileRequest {
   classYear?: number;
   interests?: string[];
 }
+
+export interface SurveyData {
+  interests: string[];
+  major: string;
+  classYear: number;
+}
+
+export interface SurveySubmissionRequest {
+  userId: string;
+  interests: string[];
+  major: string;
+  classYear: number;
+}
+
+export interface SurveyResponse {
+  message: string;
+  error: string;
+}

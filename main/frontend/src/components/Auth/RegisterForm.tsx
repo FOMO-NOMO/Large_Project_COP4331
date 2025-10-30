@@ -22,6 +22,7 @@ export default function RegisterForm(props: RegisterFormProps) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -69,11 +70,26 @@ export default function RegisterForm(props: RegisterFormProps) {
     try {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...registrationData } = formData;
-      await register(registrationData);
-      // If we get here, registration was successful
-      navigate("/survey"); // Navigate to survey after registration
+      const response = await register(registrationData);
+      
+      const isDevelopment = import.meta.env.MODE === 'development';
+      
+      if (isDevelopment) {
+        // Development mode: Auto-login successful, will redirect via routing
+        console.log('🚧 DEV MODE: Registration complete, auto-logged in');
+      } else {
+        // Production mode: Show email verification message
+        setSuccess(response.message || "Registration successful! Please check your email to verify your account.");
+        setError("");
+        
+        // Redirect to login after a delay
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
+      setSuccess("");
     } finally {
       setIsLoading(false);
     }
@@ -83,6 +99,33 @@ export default function RegisterForm(props: RegisterFormProps) {
     <div className="auth-container">
       <h2>Create Account</h2>
       <p>Sign up to get started</p>
+      
+      {import.meta.env.MODE === 'development' && (
+        <div style={{ 
+          padding: '0.5rem', 
+          backgroundColor: '#fff3cd', 
+          color: '#856404', 
+          border: '1px solid #ffeaa7', 
+          borderRadius: '4px', 
+          marginBottom: '1rem',
+          fontSize: '0.9rem'
+        }}>
+          🚧 <strong>Development Mode:</strong> Email verification will be skipped
+        </div>
+      )}
+      
+      {success && (
+        <div style={{ 
+          padding: '1rem', 
+          backgroundColor: '#d4edda', 
+          color: '#155724', 
+          border: '1px solid #c3e6cb', 
+          borderRadius: '4px', 
+          marginBottom: '1rem' 
+        }}>
+          {success}
+        </div>
+      )}
       
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', gap: '0.5rem' }}>

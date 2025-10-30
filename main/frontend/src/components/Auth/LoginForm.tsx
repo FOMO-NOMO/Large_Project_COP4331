@@ -13,7 +13,7 @@ export default function LoginForm(props: LoginFormProps) {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    login: "",
+    email: "",
     password: ""
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ export default function LoginForm(props: LoginFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.login || !formData.password) {
+    if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
     }
@@ -58,10 +58,10 @@ export default function LoginForm(props: LoginFormProps) {
       
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          name="login"
-          placeholder="Username or Email"
-          value={formData.login}
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          value={formData.email}
           onChange={handleInputChange}
           required
           disabled={isLoading}

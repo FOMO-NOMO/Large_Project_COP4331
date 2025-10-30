@@ -4,7 +4,7 @@
 import { buildPath } from '../Path.js';
 
 interface LoginCredentials {
-  login: string;
+  email: string;
   password: string;
 }
 
@@ -19,9 +19,6 @@ interface RegisterData {
 interface LoginResponse {
   accessToken?: string;
   error?: string;
-  id?: number;
-  firstName?: string;
-  lastName?: string;
 }
 
 interface RegisterResponse {
@@ -31,7 +28,9 @@ interface RegisterResponse {
 export class AuthAPI {
   static async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
-      const response = await fetch(buildPath('api/login'), {
+      console.log('Sending login credentials:', credentials); // Debug log
+      
+      const response = await fetch(buildPath('api/auth/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,6 +43,7 @@ export class AuthAPI {
       }
 
       const data = await response.json();
+      console.log('Login API response:', data); // Debug log
       return data;
     } catch (error) {
       console.error('Login API error:', error);
@@ -53,7 +53,9 @@ export class AuthAPI {
 
   static async register(userData: RegisterData): Promise<RegisterResponse> {
     try {
-      const response = await fetch(buildPath('api/register'), {
+      console.log('Sending registration data:', userData); // Debug log
+      
+      const response = await fetch(buildPath('api/auth/register'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,15 +63,18 @@ export class AuthAPI {
         body: JSON.stringify(userData)
       });
 
+      const data = await response.json();
+      console.log('Registration response:', data); // Debug log
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Return the specific error message from the backend
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
       return data;
     } catch (error) {
       console.error('Register API error:', error);
-      throw new Error('Registration failed. Please try again.');
+      throw error; // Re-throw the original error instead of generic message
     }
   }
 
