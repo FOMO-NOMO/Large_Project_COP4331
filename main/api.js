@@ -186,56 +186,56 @@ exports.setApp = function (app, client) {
     app.post('/api/auth/register', async (req, res, next) => {
         // incoming: firstName, lastName, email, login, password
         // outgoing: error
-        var error = '';
-
-        var ret = { error: error };
+        let error = '';
+    
         const { firstName, lastName, email, login, password } = req.body;
         const newUser = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            login: login,
-            password: password,
+            firstName,
+            lastName,
+            email,
+            login,
+            password,
             profilePhotoUrl: null,
             major: null,
             classYear: null,
             interests: [],
             createdAt: new Date(),
-            isVerified: false,
+            isVerified: false
         };
-
+    
         try {
             const db = client.db('user_management');
-            const existingUser = await db.collection('users').findOne({ email: email });
+            const existingUser = await db.collection('users').findOne({ email });
             if (existingUser) {
                 error = 'An account with this email already exists.';
-                return res.status(400).json({ error: error });
+                return res.status(400).json({ error });
             }
-
-            else{
-                const lastUser = await db.collection('users').find().sort({ userId: -1 }).limit(1).toArray();
-                var newUserId = 1;
-                if (lastUser.length > 0) {
-                    newUserId = lastUser[0].userId + 1;
-                }
-                newUser.userId = newUserId;
-                const result = await db.collection('users').insertOne(newUser);
-
-                const token = require("./createJWT.js");
-                const verificationToken = token.createToken(newUser.firstName, newUser.lastName, newUser.userId);
-
-                const baseURL = `${req.protocol}://${req.get('host')}`;
-
-                verificationLink = sendVerificationEmail(email, verificationToken, baseURL);
-
-                var ret = { message: 'Registration successful. Please check your email to verify your account.', userId: newUserId, emailVerificationSent: true, verificationLink: verificationLink, error: error };
+    
+            const lastUser = await db.collection('users').find().sort({ userId: -1 }).limit(1).toArray();
+            let newUserId = 1;
+            if (lastUser.length > 0) {
+                newUserId = lastUser[0].userId + 1;
             }
-        }
-        catch (e) {
+            newUser.userId = newUserId;
+            await db.collection('users').insertOne(newUser);
+    
+            const token = require("./createJWT.js");
+            const verificationToken = token.createToken(newUser.firstName, newUser.lastName, newUser.userId);
+    
+            const baseURL = `${req.protocol}://${req.get('host')}`;
+            let verificationLink = sendVerificationEmail(email, verificationToken, baseURL);
+    
+            return res.status(201).json({
+                message: 'Registration successful. Please check your email to verify your account.',
+                userId: newUserId,
+                emailVerificationSent: true,
+                verificationLink,
+                error: ''
+            });
+        } catch (e) {
             error = e.toString();
-            res.status(500).json({ error: error });
+            return res.status(500).json({ error });
         }
-        res.status(201).json(ret);
     });
 
     app.get('/api/auth/verify', async (req, res) => {
