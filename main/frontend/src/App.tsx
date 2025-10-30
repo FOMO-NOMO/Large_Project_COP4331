@@ -8,7 +8,6 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Survey from './pages/Survey';
-import SurveyTest from './pages/SurveyTest';
 import Feed from './pages/Feed';
 import Groups from './pages/Groups';
 import Messages from './pages/Messages';

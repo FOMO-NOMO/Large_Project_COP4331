@@ -76,7 +76,7 @@ export default function RegisterForm(props: RegisterFormProps) {
       
       if (isDevelopment) {
         // Development mode: Auto-login successful, will redirect via routing
-        console.log('🚧 DEV MODE: Registration complete, auto-logged in');
+        console.log('DEV MODE: Registration complete, auto-logged in');
       } else {
         // Production mode: Show email verification message
         setSuccess(response.message || "Registration successful! Please check your email to verify your account.");
