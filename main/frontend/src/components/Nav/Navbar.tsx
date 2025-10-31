@@ -12,6 +12,7 @@ export default function Navbar(){
 
     const create = async () => {
         console.log("Creating...", user);
+
         const tempostData = {
             userId: Number(user?.id),
             title: "Testing post",

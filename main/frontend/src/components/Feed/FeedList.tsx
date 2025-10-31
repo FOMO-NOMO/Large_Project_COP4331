@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import type { Post } from "../../types";
 import { PostsAPI } from "../../api/posts";
 import PostCard from "./PostCard";
+import { AuthAPI } from "../../api/auth";
+import { UsersAPI } from "../../api/users";
 
 interface FeedListProps {
   posts: Post[];
@@ -15,17 +17,20 @@ interface FeedListProps {
 }
 
 export default function FeedList(props: FeedListProps) {
-  const userId = localStorage?.getItem("userId");
-
+  const user = AuthAPI.getCurrentUser();
   const [allPosts, setAllPosts] = useState<Post[]>([]);
 
-
+  const test = useCallback(async () => {
+    const data = await UsersAPI.getProfile(user?.id);
+    console.log(data);
+  }, [])
 
   const getAllPosts = useCallback(async () => {
     try{
       const data = await PostsAPI.getPosts();
       setAllPosts(data.posts);
       console.log("Fetched posts:", allPosts);
+      console.log(data);
     }
     catch(e){
       console.error("Error fetching posts:", e);
@@ -34,6 +39,7 @@ export default function FeedList(props: FeedListProps) {
 
   useEffect(() => {
     getAllPosts();
+    test();
   }, [getAllPosts])
   // TODO: implement feed list functionality
   // Render PostCard components for each post

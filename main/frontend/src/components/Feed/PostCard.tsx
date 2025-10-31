@@ -16,11 +16,10 @@ export default function PostCard(props: PostCardProps) {
   const { post, onLike, onComment, onRSVP, onCancelRSVP } = props;
 
   return (
-
     <div className="post-card">
       <h3>{post.title}</h3>
       <p>{post.description}</p>
-      <p><strong>Author:</strong> {post.author?.name || post.authorId}</p>
+      <p><strong>Author:</strong> {post.author?.displayName || post.author?.id}</p>
       <p>
         Likes: {post.likeCount} | Comments: {post.comments.length}
       </p>
