@@ -373,6 +373,39 @@ exports.setApp = function (app, client) {
     });
 
 
+    //Users EndPoints
+
+    app.get('/api/users/me', async(req, res) => {
+        try{
+            const authHeader = req.headers.authorization;
+            if(!authHeader) return res.status(401).json({error: "Unauthorized access"});
+
+            const userId = 24;
+            const db = client.db('user_management');
+            const user = await db.collection('users').findOne({userId: Number(userId)});
+            if(!user) return res.status(404).json({error: "User not found"});
+
+            res.json(user);
+        }
+        catch(e){
+            res.status(500).json({error: e.toString()});
+        }
+    })
+
+    app.get('/api/users/:userId', async(req, res) => {
+        const { userId } = req.params;
+        try{
+            const db = client.db('user_management');
+            const user = await db.collection('users').findOne({userId: Number(userId)});
+            if(!user) return res.status(404).json({error: 'User not found'});
+            res.json(user);
+        }
+        catch(e){
+            res.status(500).json({error: e.toString()});
+        }
+    })
+
+
 
     //Posts Endpoints
     app.post('/api/posts/create', async (req, res, next) => {
@@ -381,22 +414,31 @@ exports.setApp = function (app, client) {
 
         var error = '';
         const { userId, title, description, tags, capacity } = req.body;
-        const newPost = {
-            userId: userId,
-            title: title,
-            description: description,
-            tags: tags,
-            capacity: capacity,
-            likeCount: 0,
-            commentCount: 0,
-            createdAt: new Date(),
-            comments: [],
-            postId: null,
-            userId: userId
-        };
 
         try {
             const db = client.db('user_management');
+            const user = await db.collection('users').findOne({userId: Number(userId)});
+            if(!user){
+                return res.status(404).json({error: "User not found"});
+            }
+            const newPost = {
+                userId: userId,
+                author:{
+                    id: userId,
+                    displayName: `${user.firstName} ${user.lastName}`,
+                    email: user.email,
+                },
+                title: title,
+                description: description,
+                tags: tags,
+                capacity: capacity,
+                likeCount: 0,
+                commentCount: 0,
+                createdAt: new Date(),
+                comments: [],
+                postId: null,
+                userId: userId
+            };
             const lastPost = await db.collection('posts').find().sort({ postId: -1 }).limit(1).toArray();
             var newPostId = 1;
             if (lastPost.length > 0) {
@@ -404,12 +446,13 @@ exports.setApp = function (app, client) {
             }
             newPost.postId = newPostId;
             const result = await db.collection('posts').insertOne(newPost);
+
+            var ret = { post: newPost, error: error };
+            res.status(200).json(ret);
         }
         catch (e) {
             error = e.toString();
         }
-        var ret = { post: newPost, error: error };
-        res.status(200).json(ret);
     });
 
     app.get('/api/posts', async(req, res, next) => {
