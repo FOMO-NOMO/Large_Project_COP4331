@@ -35,11 +35,12 @@ export class PostsAPI {
         body: JSON.stringify(postData)
       });
 
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error(`Failed to create post: ${response.status}`);
+        throw new Error(`Failed to create post: ${response.status} \n${data.error}`);
       }
 
-      return await response.json();
+      return data;
     } catch (error) {
       console.error('Error creating post:', error);
       throw error;

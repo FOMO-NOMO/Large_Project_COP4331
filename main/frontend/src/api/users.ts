@@ -14,14 +14,16 @@ export class UsersAPI {
     try {
       const endpoint = userId ? `api/users/${userId}` : 'api/users/me';
       const response = await fetch(buildPath(endpoint), {
+        method:'GET',
         headers: getAuthHeaders()
       });
-      
+
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error(`Failed to fetch user profile: ${response.status}`);
+        throw new Error(`Failed to fetch user profile: ${response.status} Error: ${data.error}`);
       }
-      
-      return await response.json();
+
+      return data;
     } catch (error) {
       console.error('Error fetching user profile:', error);
       throw error;
@@ -35,11 +37,11 @@ export class UsersAPI {
         headers: getAuthHeaders(),
         body: JSON.stringify(userData)
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to update profile: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -52,11 +54,11 @@ export class UsersAPI {
       const response = await fetch(buildPath(`api/users/search?q=${encodeURIComponent(query)}`), {
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to search users: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('Error searching users:', error);
