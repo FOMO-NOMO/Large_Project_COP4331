@@ -9,8 +9,6 @@ body{
   width: 100%;
   display: flex;
   justify-content: center;
-  border-bottom: 2px solid black;
-  padding-bottom: 20px;
 }
 
 
@@ -23,6 +21,7 @@ body{
   border-top: 2px solid black;
   width: 100%;
   display: flex;
+  background-color: black;
 }
 
 nav{
@@ -154,9 +153,36 @@ nav{
 
 /* Feed List Styles */
 
+.feed-header{
+  padding: 10px;
+  border-bottom: 2px solid black;
+}
+
+.feed-list{
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+  height: 90vh;
+  padding-top: 20px;
+  padding-bottom: 70px;
+  box-sizing: border-box;
+}
+
 
 /* Post Card Styles */
 
+.post-card{
+  background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
 
 /* Group Card Styles */
 
