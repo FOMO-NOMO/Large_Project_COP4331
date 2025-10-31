@@ -187,7 +187,7 @@ exports.setApp = function (app, client) {
         // incoming: firstName, lastName, email, login, password
         // outgoing: error
         let error = '';
-    
+
         const { firstName, lastName, email, login, password } = req.body;
         const newUser = {
             firstName,
@@ -202,7 +202,7 @@ exports.setApp = function (app, client) {
             createdAt: new Date(),
             isVerified: false
         };
-    
+
         try {
             const db = client.db('user_management');
             const existingUser = await db.collection('users').findOne({ email });
@@ -210,7 +210,7 @@ exports.setApp = function (app, client) {
                 error = 'An account with this email already exists.';
                 return res.status(400).json({ error });
             }
-    
+
             const lastUser = await db.collection('users').find().sort({ userId: -1 }).limit(1).toArray();
             let newUserId = 1;
             if (lastUser.length > 0) {
@@ -218,13 +218,13 @@ exports.setApp = function (app, client) {
             }
             newUser.userId = newUserId;
             await db.collection('users').insertOne(newUser);
-    
+
             const token = require("./createJWT.js");
             const verificationToken = token.createToken(newUser.firstName, newUser.lastName, newUser.userId);
-    
+
             const baseURL = `${req.protocol}://${req.get('host')}`;
             let verificationLink = sendVerificationEmail(email, verificationToken, baseURL);
-    
+
             return res.status(201).json({
                 message: 'Registration successful. Please check your email to verify your account.',
                 userId: newUserId,
@@ -249,11 +249,11 @@ exports.setApp = function (app, client) {
 
         // Verify the token
         const decoded = jwt.verify(verificationToken, process.env.ACCESS_TOKEN_SECRET);
-        
+
         // Get the user ID from the token (it's the MongoDB _id)
         const userId = decoded.userId;
         console.log(userId);
-        
+
         const db = client.db('user_management');
         const user = await db.collection("users").findOne({ userId: userId });
 
@@ -282,7 +282,7 @@ exports.setApp = function (app, client) {
     app.post('/api/auth/forgot-password', async (req, res, next) => {
         // incoming: email
         // outgoing: message(Password reset email sent), error
-    
+
         var error = '';
         var ret = {error: error};
         const { email } = req.body;
@@ -297,7 +297,7 @@ exports.setApp = function (app, client) {
                 const resetToken = token.createToken(user.firstName, user.lastName, user.userId);
 
                 const baseURL = `${req.protocol}://${req.get('host')}/reset-password?resetToken=${resetToken}`;
-                
+
                 sendResetEmail(email, resetToken, baseURL);
 
                 var ret = { message: "Password reset email sent", resetToken: resetToken, error: error};
@@ -308,14 +308,14 @@ exports.setApp = function (app, client) {
             ret = {error:error};
             res.status(500).json(ret);
         }
-        
+
         res.status(200).json(ret);
     });
 
     app.post('/api/auth/reset-password', async (req, res, next) => {
         // incoming: resetToken, newPassword
         // outgoing: message(Password has been reset), error
-    
+
         var error = '';
         var ret = {error: error};
         const { resetToken, newPassword } = req.body;
@@ -411,4 +411,17 @@ exports.setApp = function (app, client) {
         var ret = { post: newPost, error: error };
         res.status(200).json(ret);
     });
+
+    app.get('/api/posts', async(req, res, next) => {
+        try{
+            const db = client.db("user_management");
+            const posts = await db.collection("posts").find({})
+            .sort({createdAt: -1}).toArray();
+
+            res.status(200).json({posts});
+        }
+        catch(e){
+            res.status(500).json({error: e.toString()});
+        }
+    })
 }

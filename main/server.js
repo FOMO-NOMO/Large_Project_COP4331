@@ -27,7 +27,7 @@ client.connect();
 var api = require('./api.js');
 api.setApp(app, client);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT); // start Node + Express server on port 5000
 console.log('Server started on port 5000');

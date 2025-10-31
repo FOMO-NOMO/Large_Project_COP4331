@@ -38,7 +38,7 @@ export interface Message {
 export interface Comment {
   id: string;
   authorId: string;
-  author?: User; 
+  author?: User;
   text: string;
   createdAt: string;
 }
@@ -46,7 +46,7 @@ export interface Comment {
 export interface Post {
   id: string;
   authorId: string;
-  author?: User; 
+  author?: User;
   title: string;
   description: string;
   tags: string[];
@@ -69,6 +69,7 @@ export interface RSVP {
 
 // API Request/Response types
 export interface CreatePostRequest {
+  userId: number;
   title: string;
   description: string;
   tags: string[];

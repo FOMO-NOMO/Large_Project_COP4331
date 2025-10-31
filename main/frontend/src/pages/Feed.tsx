@@ -4,12 +4,15 @@ import React, { useState, useEffect } from "react";
 import FeedList from "../components/Feed/FeedList";
 import CreatePostModal from "../components/CreatePostModal";
 import type { Post } from "../types";
+import Navbar from "../components/Nav/Navbar";
 
 export default function Feed() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
+
     // TODO: Fetch posts from API
     // For now, set empty array and loading false
     setLoading(false);
@@ -34,10 +37,10 @@ export default function Feed() {
   return (
     <div className="page-container">
       <div className="feed-header">
-        <h1>Feed</h1>
+        <h1 className="page-title">Feed</h1>
         <CreatePostModal />
       </div>
-      <FeedList 
+      <FeedList
         posts={posts}
         loading={loading}
         onLoadMore={handleLoadMore}
@@ -45,6 +48,7 @@ export default function Feed() {
         onPostComment={handlePostComment}
         onPostRSVP={handlePostRSVP}
       />
+      <Navbar></Navbar>
     </div>
   );
 }

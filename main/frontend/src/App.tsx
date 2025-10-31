@@ -13,6 +13,7 @@ import Groups from './pages/Groups';
 import Messages from './pages/Messages';
 import Profile from './pages/Profile';
 import LoadingSpinner from './components/LoadingSpinner';
+import PostCard from './components/Feed/PostCard';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -20,15 +21,15 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
-  
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -38,16 +39,16 @@ interface PublicRouteProps {
 
 export function PublicRoute({ children }: PublicRouteProps) {
   const { isAuthenticated, isLoading, isNewUser } = useAuth();
-  
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  
+
   if (isAuthenticated) {
     // Redirect new users to survey, existing users to feed
     return <Navigate to={isNewUser ? "/survey" : "/feed"} replace />;
   }
-  
+
   return <>{children}</>;
 }
 
@@ -92,19 +93,20 @@ export default function App() {
                 <ResetPassword />
               </PublicRoute>
             } />
-            
+
             {/* Protected routes */}
             <Route path="/survey" element={
               <ProtectedRoute>
                 <Survey />
               </ProtectedRoute>
             } />
-            
+
             <Route path="/feed" element={
               <ProtectedRoute>
                 <Feed />
               </ProtectedRoute>
             } />
+
             <Route path="/groups" element={
               <ProtectedRoute>
                 <Groups />
@@ -120,7 +122,7 @@ export default function App() {
                 <Profile />
               </ProtectedRoute>
             } />
-            
+
             {/* Redirects */}
             <Route path="/" element={<Navigate to="/feed" replace />} />
             <Route path="*" element={<Navigate to="/feed" replace />} />

@@ -12,13 +12,14 @@ export class PostsAPI {
   static async getPosts(): Promise<Post[]> {
     try {
       const response = await fetch(buildPath('api/posts'), {
+        method: 'GET',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch posts: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -28,16 +29,16 @@ export class PostsAPI {
 
   static async createPost(postData: CreatePostRequest): Promise<Post> {
     try {
-      const response = await fetch(buildPath('api/posts'), {
+      const response = await fetch(buildPath('api/posts/create'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(postData)
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to create post: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('Error creating post:', error);
@@ -51,7 +52,7 @@ export class PostsAPI {
         method: 'POST',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to like post: ${response.status}`);
       }
@@ -67,7 +68,7 @@ export class PostsAPI {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to unlike post: ${response.status}`);
       }
@@ -84,7 +85,7 @@ export class PostsAPI {
         headers: getAuthHeaders(),
         body: JSON.stringify({ status })
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to RSVP: ${response.status}`);
       }
@@ -100,7 +101,7 @@ export class PostsAPI {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to cancel RSVP: ${response.status}`);
       }
@@ -116,7 +117,7 @@ export class PostsAPI {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to delete post: ${response.status}`);
       }
@@ -133,11 +134,11 @@ export class PostsAPI {
         headers: getAuthHeaders(),
         body: JSON.stringify(commentData)
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to add comment: ${response.status}`);
       }
-      
+
       // Returns the updated post with the new comment embedded
       return await response.json();
     } catch (error) {
@@ -152,11 +153,11 @@ export class PostsAPI {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
-      
+
       if (!response.ok) {
         throw new Error(`Failed to delete comment: ${response.status}`);
       }
-      
+
       // Returns the updated post with the comment removed
       return await response.json();
     } catch (error) {

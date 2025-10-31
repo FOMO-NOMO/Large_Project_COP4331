@@ -1,8 +1,45 @@
 /* App Component Styles */
 
+body{
+  padding: 0;
+  margin: 0;
+}
+
+.page-title{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 20px;
+}
+
 
 /* Bottom Navigation Styles */
 
+.navbar-container{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 2px solid black;
+  width: 100%;
+  display: flex;
+}
+
+nav{
+  padding: 10px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.nav-button{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: yellow;
+  display: grid;
+  place-items:center;
+}
 
 /* Create Post Modal Styles */
 
@@ -385,19 +422,19 @@
   .survey-page {
     padding: 1rem;
   }
-  
+
   .survey-header h1 {
     font-size: 2rem;
   }
-  
+
   .interests-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
-  
+
   .class-year-options {
     gap: 0.25rem;
   }
-  
+
   .survey-submit {
     padding: 0.75rem 2rem;
     font-size: 1rem;
