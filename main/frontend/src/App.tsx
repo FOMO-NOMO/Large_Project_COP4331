@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import LoadingSpinner from './components/LoadingSpinner';
 import PostCard from './components/Feed/PostCard';
 
+<<<<<<< HEAD
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
@@ -132,3 +133,23 @@ export default function App() {
     </AuthProvider>
   );
 }
+=======
+import LoginPage from './pages/LoginPage';
+import CardPage from './pages/CardPage';
+import SignUp from "./components/SignUp";
+
+function App() {
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/cards" element={<CardPage />}/>
+      </Routes>
+    </BrowserRouter>
+      );
+}
+
+export default App;
+>>>>>>> 294629c6e2c92cc3ea407a75375a0427dae413c3
