@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import type { Post } from "../../types";
 import { PostsAPI } from "../../api/posts";
+import PostCard from "./PostCard";
 
 interface FeedListProps {
   posts: Post[];
@@ -38,18 +39,16 @@ export default function FeedList(props: FeedListProps) {
   // Render PostCard components for each post
   return (
     <div className="feed-list">
-      {allPosts.length === 0 ? (
-        <p>No posts yet.</p>
-      ) : (
-        allPosts.map((post) => (
-          <div key={post._id} className="post-card">
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <p><strong>Tags:</strong> {post.tags.join(", ")}</p>
-            <small>Capacity: {post.capacity}</small>
-          </div>
-        ))
-      )}
+      {allPosts.map((post) => (
+        <PostCard
+            key={post._id}
+            post={post}
+            onLike={(id) => console.log("Liked post", id)}
+            onComment={(id) => console.log("Comment on post", id)}
+            onRSVP={(id, status) => console.log(`RSVP ${status} for post ${id}`)}
+            onCancelRSVP={(id) => console.log("cancel rsvp for post", id)}
+         ></PostCard>
+      ))}
     </div>
   );
 }
