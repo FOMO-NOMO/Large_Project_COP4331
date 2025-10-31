@@ -69,7 +69,7 @@ export interface RSVP {
 
 // API Request/Response types
 export interface CreatePostRequest {
-  userId: number;
+  userId : number;
   title: string;
   description: string;
   tags: string[];
