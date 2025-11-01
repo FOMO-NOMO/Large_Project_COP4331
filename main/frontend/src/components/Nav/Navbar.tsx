@@ -1,14 +1,13 @@
-import React from 'react';
-
-
 import { PostsAPI } from '../../api/posts';
 import { AuthAPI } from '../../api/auth';
 
+import { images} from '../../assets/images/images';
 
 export default function Navbar(){
 
     // const { userId, title, description, tags, capacity } = req.body;
     const user = AuthAPI.getCurrentUser();
+
 
     const create = async () => {
         console.log("Creating...", user);
@@ -22,19 +21,34 @@ export default function Navbar(){
         }
 
         const data = await PostsAPI.createPost(tempostData);
-        console.log(data);
     }
 
 
 
     return(
         <div className='navbar-container'>
+            <p className="app-title">FOMO NOMO</p>
             <nav>
-                <div className='nav-button home'>h</div>
-                <div className='nav-button group'>g</div>
-                <div className='nav-button create' onClick={create}>Create</div>
-                <div className='nav-button message'>m</div>
-                <div className='nav-button account'>account</div>
+                <div className='nav-button home'>
+                    <img src={images.homeicon}/>
+                    <p>Home</p>
+                </div>
+                <div className='nav-button group'>
+                    <img src={images.groupicon}/>
+                    <p>Groups</p>
+                </div>
+                <div className='nav-button create' onClick={create}>
+                    <img src={images.createicon}/>
+                    <p>Create</p>
+                </div>
+                <div className='nav-button message'>
+                    <img src={images.messageicon}/>
+                    <p>Messages</p>
+                </div>
+                <div className='nav-button account'>
+                    <img src={images.profileicon}/>
+                    <p>Account</p>
+                </div>
             </nav>
         </div>
     );

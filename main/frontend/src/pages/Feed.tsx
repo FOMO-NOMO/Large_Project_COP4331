@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import FeedList from "../components/Feed/FeedList";
 import CreatePostModal from "../components/CreatePostModal";
 import type { Post } from "../types";
-import Navbar from "../components/Nav/Navbar";
+import BottomNavigation from "../components/BottomNavigation";
 
 export default function Feed() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -35,20 +35,22 @@ export default function Feed() {
   };
 
   return (
-    <div className="page-container">
+    <div className="feed-container">
       <div className="feed-header">
         <h1 className="page-title">Feed</h1>
         <CreatePostModal />
       </div>
-      <FeedList
-        posts={posts}
-        loading={loading}
-        onLoadMore={handleLoadMore}
-        onPostLike={handlePostLike}
-        onPostComment={handlePostComment}
-        onPostRSVP={handlePostRSVP}
-      />
-      <Navbar></Navbar>
+      <div className="feed-list-container">
+        <FeedList
+          posts={posts}
+          loading={loading}
+          onLoadMore={handleLoadMore}
+          onPostLike={handlePostLike}
+          onPostComment={handlePostComment}
+          onPostRSVP={handlePostRSVP}
+        />
+      </div>
+      <BottomNavigation></BottomNavigation>
     </div>
   );
 }
