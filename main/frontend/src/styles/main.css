@@ -210,7 +210,10 @@ nav {
 
 /* Feed List Styles */
 
-.feed-header{
+.feed-header, .profile-header{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   padding: 10px;
   border-bottom: var(--border-width) solid var(--border)
 }
@@ -264,6 +267,22 @@ nav {
 
 
 /* Profile Card Styles */
+
+.profile-content{
+  background-color: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logout-button{
+  display: flex;
+  padding: 10px;
+  font-size: 15px;
+}
+.logout-button img{
+  height: 20px;
+}
 
 
 /* Feed Page Styles */

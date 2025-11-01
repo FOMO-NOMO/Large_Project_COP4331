@@ -29,7 +29,7 @@ export class AuthAPI {
   static async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
       console.log('Sending login credentials:', credentials); // Debug log
-      
+
       const response = await fetch(buildPath('api/auth/login'), {
         method: 'POST',
         headers: {
@@ -54,7 +54,7 @@ export class AuthAPI {
   static async register(userData: RegisterData): Promise<RegisterResponse> {
     try {
       console.log('Sending registration data:', userData); // Debug log
-      
+
       const response = await fetch(buildPath('api/auth/register'), {
         method: 'POST',
         headers: {
@@ -65,7 +65,7 @@ export class AuthAPI {
 
       const data = await response.json();
       console.log('Registration response:', data); // Debug log
-      
+
       if (!response.ok) {
         // Return the specific error message from the backend
         throw new Error(data.error || `HTTP error! status: ${response.status}`);
@@ -106,7 +106,7 @@ export class AuthAPI {
 
       // redirect to login page
       window.location.href = '/login';
-      
+
     } catch (error) {
       console.error('Logout error:', error);
       // force cleanup even if there's an error
@@ -131,7 +131,7 @@ export class AuthAPI {
         token: token
       };
     }
-    
+
     return null;
   }
 
@@ -156,7 +156,7 @@ export class AuthAPI {
       }
 
       const data = await response.json();
-      
+
       if (data.error) {
         throw new Error(data.error);
       }
@@ -197,7 +197,7 @@ export class AuthAPI {
       throw new Error('Failed to send password reset email. Please try again.');
     }
   }
-  
+
   static async resetPassword(token: string, newPassword: string): Promise<{ message?: string; error?: string }> {
     try {
       const response = await fetch(buildPath('api/auth/reset-password'), {
@@ -227,10 +227,10 @@ export class AuthAPI {
     if (!token) return true;
 
     try {
-      // Decode JWT payload 
+      // Decode JWT payload
       const payload = JSON.parse(atob(token.split('.')[1]));
       const currentTime = Math.floor(Date.now() / 1000);
-      
+
       // Check if token has exp field and if it's expired
       return payload.exp && payload.exp < currentTime;
     } catch (error) {
