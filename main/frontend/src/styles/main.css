@@ -104,39 +104,72 @@ nav {
 
 
 /* Auth Container Styles */
+
+.page-container{
+  height: 100vh;
+  overflow: hidden;
+}
 .auth-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: var(--bg-light)
+}
+
+.auth-header{
+  position: absolute;
+  top: 10%;
 }
 
 .auth-container h2 {
   text-align: center;
   margin-bottom: 1.5rem;
   color: #333;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 .auth-container p {
   margin-bottom: 1rem;
-  color: #666;
   text-align: center;
+  font-size: 18px;
 }
 
 .auth-container form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
+  max-width: 400px;
+  align-items: center;
 }
 
 .auth-container input {
   padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid var(--border);
+  background-color: var(--bg-dark);
+  border-radius: 6px;
   font-size: 16px;
+  box-sizing: border-box;
+}
+
+.name-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.name-row input {
+  margin-bottom: 0;
+  flex: 1;
 }
 
 .auth-container input:focus {
@@ -151,18 +184,23 @@ nav {
 }
 
 .auth-container button {
+  width: 100%;
+  font-size: larger;
+  font-weight: 600;
+  border-radius: 6px;
   padding: 12px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--bg-dark);
+  color: var(--text);
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 10px;
 }
 
 .auth-container button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--bg);
 }
 
 .auth-container button:disabled {
@@ -206,6 +244,85 @@ nav {
 }
 
 /* Login Form Styles */
+
+.login-button-container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.sign-up-button {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.sign-up-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-dark);
+  text-decoration: none;
+  color: var(--text);
+  width: 90%;
+  padding: 12px;
+  font-size: larger;
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+.sign-up-link:hover {
+  background-color: var(--bg);
+}
+
+.link{
+  color: var(--text);
+  text-decoration: none;
+}
+
+.forgot-pass-link:hover{
+  color:blue;
+  text-decoration: underline;
+}
+
+
+.divider {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid black;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.divider span {
+  position: relative;
+  background-color: var(--bg-light);
+  padding: 0 10px;
+  z-index: 1;
+  color: var(--text);
+}
+
+
+
+
+span{
+  margin-bottom: 2rem;
+}
+
 
 
 /* Feed List Styles */

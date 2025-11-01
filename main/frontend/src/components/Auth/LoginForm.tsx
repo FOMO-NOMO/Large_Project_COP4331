@@ -31,7 +31,7 @@ export default function LoginForm(props: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
       setError("Please fill in all fields");
       return;
@@ -53,9 +53,11 @@ export default function LoginForm(props: LoginFormProps) {
 
   return (
     <div className="auth-container">
-      <h2>Welcome Back</h2>
-      <p>Sign in to your account</p>
-      
+      <div className="auth-header">
+        <h2>Fomo Nomo</h2>
+        <p>Come join the fun</p>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -66,7 +68,7 @@ export default function LoginForm(props: LoginFormProps) {
           required
           disabled={isLoading}
         />
-        
+
         <input
           type="password"
           name="password"
@@ -76,10 +78,22 @@ export default function LoginForm(props: LoginFormProps) {
           required
           disabled={isLoading}
         />
-        
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Signing in..." : "Sign In"}
-        </button>
+
+        <div className="login-button-container">
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Loggin in..." : "Login"}
+          </button>
+          <Link className="link forgot-pass-link" to="/forgot-password">Forgot Password?</Link>
+          <div className="divider">
+            <span>Or</span>
+          </div>
+        </div>
+
+
+        <div className="sign-up-button">
+          <Link className="link sign-up-link" to="/register">Sign up</Link>
+        </div>
+
       </form>
 
       {error && (
@@ -88,11 +102,11 @@ export default function LoginForm(props: LoginFormProps) {
         </div>
       )}
 
-      <div className="auth-links">
+      {/* <div className="auth-links">
         <Link to="/forgot-password">Forgot Password?</Link>
         <span> • </span>
         <Link to="/register">Don't have an account? Sign up</Link>
-      </div>
+      </div> */}
     </div>
   );
 }

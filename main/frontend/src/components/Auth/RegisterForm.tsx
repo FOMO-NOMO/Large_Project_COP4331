@@ -57,7 +57,7 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationError = validateForm();
     if (validationError) {
       setError(validationError);
@@ -71,9 +71,9 @@ export default function RegisterForm(props: RegisterFormProps) {
       // Remove confirmPassword before sending to API
       const { confirmPassword, ...registrationData } = formData;
       const response = await register(registrationData);
-      
+
       const isDevelopment = import.meta.env.MODE === 'development';
-      
+
       if (isDevelopment) {
         // Development mode: Auto-login successful, will redirect via routing
         console.log('DEV MODE: Registration complete, auto-logged in');
@@ -81,7 +81,7 @@ export default function RegisterForm(props: RegisterFormProps) {
         // Production mode: Show email verification message
         setSuccess(response.message || "Registration successful! Please check your email to verify your account.");
         setError("");
-        
+
         // Redirect to login after a delay
         setTimeout(() => {
           navigate("/login");
@@ -99,36 +99,36 @@ export default function RegisterForm(props: RegisterFormProps) {
     <div className="auth-container">
       <h2>Create Account</h2>
       <p>Sign up to get started</p>
-      
+
       {import.meta.env.MODE === 'development' && (
-        <div style={{ 
-          padding: '0.5rem', 
-          backgroundColor: '#fff3cd', 
-          color: '#856404', 
-          border: '1px solid #ffeaa7', 
-          borderRadius: '4px', 
+        <div style={{
+          padding: '0.5rem',
+          backgroundColor: '#fff3cd',
+          color: '#856404',
+          border: '1px solid #ffeaa7',
+          borderRadius: '4px',
           marginBottom: '1rem',
           fontSize: '0.9rem'
         }}>
           🚧 <strong>Development Mode:</strong> Email verification will be skipped
         </div>
       )}
-      
+
       {success && (
-        <div style={{ 
-          padding: '1rem', 
-          backgroundColor: '#d4edda', 
-          color: '#155724', 
-          border: '1px solid #c3e6cb', 
-          borderRadius: '4px', 
-          marginBottom: '1rem' 
+        <div style={{
+          padding: '1rem',
+          backgroundColor: '#d4edda',
+          color: '#155724',
+          border: '1px solid #c3e6cb',
+          borderRadius: '4px',
+          marginBottom: '1rem'
         }}>
           {success}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="name-row">
           <input
             type="text"
             name="firstName"
@@ -137,9 +137,8 @@ export default function RegisterForm(props: RegisterFormProps) {
             onChange={handleInputChange}
             required
             disabled={isLoading}
-            style={{ flex: 1 }}
           />
-          
+
           <input
             type="text"
             name="lastName"
@@ -148,11 +147,8 @@ export default function RegisterForm(props: RegisterFormProps) {
             onChange={handleInputChange}
             required
             disabled={isLoading}
-            style={{ flex: 1 }}
           />
-        </div>
-        
-        <input
+        </div>        <input
           type="email"
           name="email"
           placeholder="Email Address"
@@ -161,7 +157,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           required
           disabled={isLoading}
         />
-        
+
         <input
           type="text"
           name="login"
@@ -171,7 +167,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           required
           disabled={isLoading}
         />
-        
+
         <input
           type="password"
           name="password"
@@ -181,7 +177,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           required
           disabled={isLoading}
         />
-        
+
         <input
           type="password"
           name="confirmPassword"
@@ -191,7 +187,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           required
           disabled={isLoading}
         />
-        
+
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Creating Account..." : "Create Account"}
         </button>
